@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
- "scripts": {
+  "scripts": {
     "dev:api": "tsx src/server.ts",
     "dev:worker": "tsx src/worker.ts",
     "build": "tsc",
@@ -37,6 +37,10 @@
     "seed": "npx tsx prisma/seed.ts"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/express-session": "^1.19.0",
     "@types/node": "^26.6.2",
     "prisma": "^5.11.0",
     "ts-node": "^10.9.2",
