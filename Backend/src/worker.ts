@@ -30,7 +30,7 @@ async function bootstrap() {
     process.on('SIGTERM', shutdown);
 
   } catch (err) {
-    logger.error('Failed to start worker:', err);
+    logger.error({ err }, 'Failed to start worker');
     process.exit(1);
   }
 }

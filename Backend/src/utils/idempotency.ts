@@ -37,7 +37,7 @@ export const idempotencyService = {
       });
       return result.count > 0;
     } catch (err) {
-      logger.error(`Error transitioning email ${emailId} to processing:`, err);
+      logger.error({ err }, `Error transitioning email ${emailId} to processing`);
       return false;
     }
   }

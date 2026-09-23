@@ -71,7 +71,7 @@ export const emailController = {
 
   async getById(req: Request, res: Response) {
     try {
-      const email = await prisma.email.findUnique({ where: { id: req.params.id } });
+      const email = await prisma.email.findUnique({ where: { id: req.params.id as string } });
       if (!email) return res.status(404).json({ success: false, error: { message: 'Not found' } });
       res.json({ success: true, data: email });
     } catch (err: any) {

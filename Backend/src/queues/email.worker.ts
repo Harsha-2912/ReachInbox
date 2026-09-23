@@ -26,7 +26,7 @@ async function indexEmailInES(emailId: string) {
       });
     }
   } catch (err) {
-    logger.error(`Failed to index email ${emailId} in ES:`, err);
+    logger.error({ err }, `Failed to index email ${emailId} in ES`);
   }
 }
 

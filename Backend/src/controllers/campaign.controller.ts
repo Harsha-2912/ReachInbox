@@ -87,7 +87,7 @@ export const campaignController = {
 
     } catch (err: any) {
       if (err instanceof z.ZodError) {
-        return res.status(400).json({ success: false, error: { code: 'VALIDATION_ERROR', message: err.errors } });
+        return res.status(400).json({ success: false, error: { code: 'VALIDATION_ERROR', message: err.issues } });
       }
       res.status(500).json({ success: false, error: { message: err.message } });
     }
@@ -112,7 +112,7 @@ export const campaignController = {
   async getById(req: Request, res: Response) {
     try {
       const campaign = await prisma.campaign.findUnique({
-        where: { id: req.params.id },
+        where: { id: req.params.id as string },
         include: { sender: true },
       });
       if (!campaign) {
@@ -126,7 +126,7 @@ export const campaignController = {
 
   async cancel(req: Request, res: Response) {
     try {
-      const campaignId = req.params.id;
+      const campaignId = req.params.id as string;
       
       await prisma.$transaction(async (tx) => {
         await tx.campaign.update({
