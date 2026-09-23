@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
+ "scripts": {
     "dev:api": "tsx src/server.ts",
     "dev:worker": "tsx src/worker.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "start:api": "node dist/server.js",
+    "start:worker": "node dist/worker.js"
   },
   "keywords": [],
   "author": "",
