@@ -154,7 +154,14 @@ export const authController = {
         return res.status(401).json({ success: false, error: 'User not found' });
       }
 
-      res.json({ success: true, data: user });
+      res.json({ 
+        success: true, 
+        data: {
+          ...user,
+          googleConnected: !!user.googleId,
+          role: 'User'
+        } 
+      });
     } catch (err: any) {
       res.status(500).json({ success: false, error: err.message });
     }
