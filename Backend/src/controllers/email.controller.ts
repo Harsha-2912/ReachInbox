@@ -2,6 +2,17 @@ import { Request, Response } from 'express';
 import { prisma } from '../config/database';
 import { esClient } from '../config/elasticsearch';
 
+function formatEmailRecord(email: any) {
+  return {
+    ...email,
+    campaignName: email.campaign?.subject || 'Campaign',
+    senderEmail: email.sender?.email || '',
+    scheduledTime: email.scheduledAt ? new Date(email.scheduledAt).toISOString() : null,
+    sentTime: email.sentAt ? new Date(email.sentAt).toISOString() : null,
+    delaySeconds: email.campaign?.delayMs ? Math.round(email.campaign.delayMs / 1000) : 0,
+  };
+}
+
 export const emailController = {
   async getScheduled(req: Request, res: Response) {
     try {
@@ -11,13 +22,19 @@ export const emailController = {
 
       const where = { status: { in: ['scheduled', 'processing', 'rate_limited'] } };
       const [emails, total] = await Promise.all([
-        prisma.email.findMany({ where, skip, take: limit, orderBy: { scheduledAt: 'asc' } }),
+        prisma.email.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: { scheduledAt: 'asc' },
+          include: { campaign: true, sender: true },
+        }),
         prisma.email.count({ where }),
       ]);
 
       res.json({
         success: true,
-        data: emails,
+        data: emails.map(formatEmailRecord),
         pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
       });
     } catch (err: any) {
@@ -33,13 +50,19 @@ export const emailController = {
 
       const where = { status: 'sent' };
       const [emails, total] = await Promise.all([
-        prisma.email.findMany({ where, skip, take: limit, orderBy: { sentAt: 'desc' } }),
+        prisma.email.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: { sentAt: 'desc' },
+          include: { campaign: true, sender: true },
+        }),
         prisma.email.count({ where }),
       ]);
 
       res.json({
         success: true,
-        data: emails,
+        data: emails.map(formatEmailRecord),
         pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
       });
     } catch (err: any) {
@@ -55,13 +78,19 @@ export const emailController = {
 
       const where = { status: 'failed' };
       const [emails, total] = await Promise.all([
-        prisma.email.findMany({ where, skip, take: limit, orderBy: { updatedAt: 'desc' } }),
+        prisma.email.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: { updatedAt: 'desc' },
+          include: { campaign: true, sender: true },
+        }),
         prisma.email.count({ where }),
       ]);
 
       res.json({
         success: true,
-        data: emails,
+        data: emails.map(formatEmailRecord),
         pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
       });
     } catch (err: any) {
@@ -71,9 +100,12 @@ export const emailController = {
 
   async getById(req: Request, res: Response) {
     try {
-      const email = await prisma.email.findUnique({ where: { id: req.params.id as string } });
+      const email = await prisma.email.findUnique({
+        where: { id: req.params.id as string },
+        include: { campaign: true, sender: true },
+      });
       if (!email) return res.status(404).json({ success: false, error: { message: 'Not found' } });
-      res.json({ success: true, data: email });
+      res.json({ success: true, data: formatEmailRecord(email) });
     } catch (err: any) {
       res.status(500).json({ success: false, error: { message: err.message } });
     }
@@ -103,7 +135,7 @@ export const emailController = {
           },
         });
 
-        const hits = (esResult.hits.hits as any[]).map(hit => hit._source);
+        const hits = (esResult.hits.hits as any[]).map(hit => formatEmailRecord(hit._source));
         const total = typeof esResult.hits.total === 'number' ? esResult.hits.total : esResult.hits.total?.value || 0;
 
         return res.json({
@@ -121,13 +153,19 @@ export const emailController = {
           ],
         };
         const [emails, total] = await Promise.all([
-          prisma.email.findMany({ where, skip, take: limit, orderBy: { createdAt: 'desc' } }),
+          prisma.email.findMany({
+            where,
+            skip,
+            take: limit,
+            orderBy: { createdAt: 'desc' },
+            include: { campaign: true, sender: true },
+          }),
           prisma.email.count({ where }),
         ]);
 
         return res.json({
           success: true,
-          data: emails,
+          data: emails.map(formatEmailRecord),
           pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
         });
       }

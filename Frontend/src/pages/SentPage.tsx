@@ -60,8 +60,8 @@ export function SentPage() {
   const columns: Column<Email>[] = [
     { key: 'recipient', header: 'Recipient', render: (r) => <span className="font-medium text-ink-900">{r.recipient}</span> },
     { key: 'subject', header: 'Subject', render: (r) => <span className="text-ink-700 truncate block max-w-[220px]">{r.subject}</span> },
-    { key: 'campaign', header: 'Campaign', render: (r) => <span className="text-ink-600">{r.campaignName}</span> },
-    { key: 'time', header: 'Sent Time', render: (r) => <span className="text-ink-600">{formatDateTime(r.sentTime)}</span> },
+    { key: 'campaign', header: 'Campaign', render: (r: any) => <span className="text-ink-600">{r.campaignName || r.campaign?.subject || r.campaign?.name || 'General Campaign'}</span> },
+    { key: 'time', header: 'Sent Time', render: (r: any) => <span className="text-ink-600">{formatDateTime(r.sentTime || r.sentAt)}</span> },
     { key: 'status', header: 'Status', render: (r) => <StatusBadge status={r.status} size="sm" /> },
     {
       key: 'actions', header: '', headerClassName: 'text-right', className: 'text-right',

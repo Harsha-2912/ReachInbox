@@ -95,12 +95,12 @@ export function DashboardPage() {
     {
       key: 'campaign',
       header: 'Campaign',
-      render: (row) => <span className="text-ink-600">{row.campaignName}</span>,
+      render: (row: any) => <span className="text-ink-600">{row.campaignName || row.campaign?.subject || row.campaign?.name || 'General Campaign'}</span>,
     },
     {
       key: 'time',
       header: 'Scheduled / Sent',
-      render: (row) => <span className="text-ink-600">{formatTime(row.scheduledTime)}</span>,
+      render: (row: any) => <span className="text-ink-600">{formatTime(row.scheduledTime || row.scheduledAt || row.sentTime || row.sentAt)}</span>,
     },
     {
       key: 'status',

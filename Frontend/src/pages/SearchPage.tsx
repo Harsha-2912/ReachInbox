@@ -62,8 +62,8 @@ export function SearchPage() {
     { key: 'recipient', header: 'Recipient', render: (r) => <span className="font-medium text-ink-900">{r.recipient}</span> },
     { key: 'subject', header: 'Subject', render: (r) => <span className="text-ink-700 truncate block max-w-[240px]">{r.subject}</span> },
     { key: 'status', header: 'Status', render: (r) => <StatusBadge status={r.status} size="sm" /> },
-    { key: 'scheduled', header: 'Scheduled', render: (r) => <span className="text-ink-600">{formatDateTime(r.scheduledTime)}</span> },
-    { key: 'sent', header: 'Sent', render: (r) => <span className="text-ink-600">{formatDateTime(r.sentTime)}</span> },
+    { key: 'scheduled', header: 'Scheduled', render: (r: any) => <span className="text-ink-600">{formatDateTime(r.scheduledTime || r.scheduledAt)}</span> },
+    { key: 'sent', header: 'Sent', render: (r: any) => <span className="text-ink-600">{formatDateTime(r.sentTime || r.sentAt)}</span> },
   ];
 
   return (

@@ -68,9 +68,12 @@ export function ScheduledPage() {
   const columns: Column<Email>[] = [
     { key: 'recipient', header: 'Recipient', render: (r) => <span className="font-medium text-ink-900">{r.recipient}</span> },
     { key: 'subject', header: 'Subject', render: (r) => <span className="text-ink-700 truncate block max-w-[200px]">{r.subject}</span> },
-    { key: 'campaign', header: 'Campaign', render: (r) => <span className="text-ink-600">{r.campaignName}</span> },
-    { key: 'time', header: 'Scheduled Time', render: (r) => <span className="text-ink-600">{formatDateTime(r.scheduledTime)}</span> },
-    { key: 'delay', header: 'Delay', render: (r) => <span className="text-ink-600">{r.delaySeconds}s</span> },
+    { key: 'campaign', header: 'Campaign', render: (r: any) => <span className="text-ink-600">{r.campaignName || r.campaign?.subject || r.campaign?.name || 'General Campaign'}</span> },
+    { key: 'time', header: 'Scheduled Time', render: (r: any) => <span className="text-ink-600">{formatDateTime(r.scheduledTime || r.scheduledAt)}</span> },
+    { key: 'delay', header: 'Delay', render: (r: any) => {
+      const delay = r.delaySeconds !== undefined ? r.delaySeconds : (r.campaign?.delayMs ? Math.round(r.campaign.delayMs / 1000) : 0);
+      return <span className="text-ink-600">{delay}s</span>;
+    }},
     { key: 'status', header: 'Status', render: (r) => <StatusBadge status={r.status} size="sm" /> },
     {
       key: 'actions', header: '', headerClassName: 'text-right', className: 'text-right',

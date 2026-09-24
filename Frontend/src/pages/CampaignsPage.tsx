@@ -47,29 +47,34 @@ export function CampaignsPage() {
   const handleRetry = (id: string) => toast.success('Campaign retry initiated');
 
   const columns: Column<Campaign>[] = [
-    { key: 'name', header: 'Campaign', render: (r) => (
+    { key: 'name', header: 'Campaign', render: (r: any) => (
       <div className="min-w-0">
-        <p className="font-medium text-ink-900 truncate">{r.name}</p>
-        <p className="text-[12px] text-ink-500 truncate">{r.subject}</p>
+        <p className="font-medium text-ink-900 truncate">{r.name || r.subject || 'Campaign'}</p>
+        <p className="text-[12px] text-ink-500 truncate">{r.subject || r.name}</p>
       </div>
     )},
     { key: 'status', header: 'Status', render: (r) => <StatusBadge status={r.status} size="sm" /> },
-    { key: 'recipients', header: 'Recipients', render: (r) => (
-      <span className="text-ink-600">{formatNumber(r.recipientCount)}</span>
+    { key: 'recipients', header: 'Recipients', render: (r: any) => (
+      <span className="text-ink-600">{formatNumber(r.recipientCount ?? r.totalRecipients ?? 0)}</span>
     )},
-    { key: 'progress', header: 'Progress', render: (r) => (
-      <div className="flex items-center gap-2">
-        <div className="w-24 h-1.5 bg-ink-100 rounded-full overflow-hidden">
-          <div
-            className={`h-full rounded-full ${r.failedCount > r.sentCount ? 'bg-error' : 'bg-success'}`}
-            style={{ width: `${r.recipientCount > 0 ? (r.sentCount / r.recipientCount) * 100 : 0}%` }}
-          />
+    { key: 'progress', header: 'Progress', render: (r: any) => {
+      const total = r.recipientCount ?? r.totalRecipients ?? 0;
+      const sent = r.sentCount ?? 0;
+      const failed = r.failedCount ?? 0;
+      return (
+        <div className="flex items-center gap-2">
+          <div className="w-24 h-1.5 bg-ink-100 rounded-full overflow-hidden">
+            <div
+              className={`h-full rounded-full ${failed > sent ? 'bg-error' : 'bg-success'}`}
+              style={{ width: `${total > 0 ? (sent / total) * 100 : 0}%` }}
+            />
+          </div>
+          <span className="text-[12px] text-ink-600">{formatNumber(sent)}/{formatNumber(total)}</span>
         </div>
-        <span className="text-[12px] text-ink-600">{formatNumber(r.sentCount)}/{formatNumber(r.recipientCount)}</span>
-      </div>
-    )},
+      );
+    }},
     { key: 'start', header: 'Start Time', render: (r) => <span className="text-ink-600">{formatDateTime(r.startTime)}</span> },
-    { key: 'sender', header: 'Sender', render: (r) => <span className="text-ink-600">{r.senderEmail}</span> },
+    { key: 'sender', header: 'Sender', render: (r: any) => <span className="text-ink-600">{r.senderEmail || r.sender?.email || '—'}</span> },
     {
       key: 'actions', header: '', headerClassName: 'text-right', className: 'text-right',
       render: (r) => (

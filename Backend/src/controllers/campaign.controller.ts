@@ -103,7 +103,16 @@ export const campaignController = {
         include: { sender: true },
         orderBy: { createdAt: 'desc' },
       });
-      res.json({ success: true, data: campaigns });
+
+      const formatted = campaigns.map((c) => ({
+        ...c,
+        name: c.subject,
+        recipientCount: c.totalRecipients,
+        delaySeconds: c.delayMs ? Math.round(c.delayMs / 1000) : 0,
+        senderEmail: c.sender?.email || '',
+      }));
+
+      res.json({ success: true, data: formatted });
     } catch (err: any) {
       res.status(500).json({ success: false, error: { message: err.message } });
     }
@@ -118,7 +127,16 @@ export const campaignController = {
       if (!campaign) {
         return res.status(404).json({ success: false, error: { message: 'Not found' } });
       }
-      res.json({ success: true, data: campaign });
+      res.json({
+        success: true,
+        data: {
+          ...campaign,
+          name: campaign.subject,
+          recipientCount: campaign.totalRecipients,
+          delaySeconds: campaign.delayMs ? Math.round(campaign.delayMs / 1000) : 0,
+          senderEmail: campaign.sender?.email || '',
+        },
+      });
     } catch (err: any) {
       res.status(500).json({ success: false, error: { message: err.message } });
     }
