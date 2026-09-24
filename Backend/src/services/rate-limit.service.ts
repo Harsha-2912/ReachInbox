@@ -11,7 +11,7 @@ export const rateLimitService = {
     const key = `email-rate:${senderId}:${currentHour}`;
 
     const luaScript = `
-      var count = redis.call('GET', KEYS[1])
+      local count = redis.call('GET', KEYS[1])
       if not count then
         redis.call('SET', KEYS[1], 1, 'EX', 3600)
         return 1
@@ -39,7 +39,7 @@ export const rateLimitService = {
     const delay = env.MIN_EMAIL_DELAY_MS;
 
     const luaScript = `
-      var nextSend = redis.call('GET', KEYS[1])
+      local nextSend = redis.call('GET', KEYS[1])
       if not nextSend or tonumber(nextSend) <= tonumber(ARGV[1]) then
         -- Allowed to send now. Set the next allowed time
         redis.call('SET', KEYS[1], tonumber(ARGV[1]) + tonumber(ARGV[2]))
