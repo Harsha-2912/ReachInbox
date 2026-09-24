@@ -22,6 +22,8 @@ export const authService = {
   },
 
   async getGoogleAuthUrl(): Promise<string> {
-    return `${API_BASE_URL}/auth/google`;
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const query = origin ? `?returnTo=${encodeURIComponent(origin)}` : '';
+    return `${API_BASE_URL}/auth/google${query}`;
   },
 };
