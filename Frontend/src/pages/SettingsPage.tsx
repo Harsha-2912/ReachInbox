@@ -62,7 +62,7 @@ export function SettingsPage() {
           </div>
           <CardBody className="pt-5 space-y-5">
             <div className="flex items-center gap-4 pb-5 border-b border-ink-200">
-              <Avatar name={user?.name || 'User'} size="lg" />
+              <Avatar name={user?.name || 'User'} src={user?.avatarUrl} size="lg" />
               <div>
                 <p className="text-[15px] font-semibold text-ink-900">{user?.name}</p>
                 <p className="text-[13px] text-ink-600">{user?.email}</p>

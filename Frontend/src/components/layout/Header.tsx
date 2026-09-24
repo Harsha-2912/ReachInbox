@@ -83,7 +83,7 @@ export function Header({ onMenuClick }: HeaderProps) {
             width={220}
             trigger={
               <div className="flex items-center gap-2.5 cursor-pointer py-1 px-1 rounded-lg hover:bg-ink-50 transition-colors">
-                <Avatar name={user?.name || 'User'} size="sm" />
+                <Avatar name={user?.name || 'User'} src={user?.avatarUrl} size="sm" />
                 <div className="hidden sm:block text-left min-w-0">
                   <p className="text-[13px] font-medium text-ink-900 truncate max-w-[120px]">{user?.name || 'User'}</p>
                   <p className="text-[11px] text-ink-500 truncate">{user?.role || 'Member'}</p>
@@ -93,8 +93,8 @@ export function Header({ onMenuClick }: HeaderProps) {
             }
           >
             <div className="px-3.5 py-3 border-b border-ink-200">
-              <p className="text-[13px] font-medium text-ink-900 truncate">{user?.name}</p>
-              <p className="text-[12px] text-ink-500 truncate">{user?.email}</p>
+              <p className="text-[13px] font-medium text-ink-900 truncate">{user?.name || 'User'}</p>
+              <p className="text-[12px] text-ink-500 truncate">{user?.email || ''}</p>
             </div>
             <DropdownItem icon={<User className="w-4 h-4" />} onClick={() => navigate('/settings')}>
               Profile

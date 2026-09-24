@@ -39,8 +39,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         })
         .catch(err => {
           console.error("Failed to fetch user:", err);
-          setIsAuthenticated(false);
-          localStorage.removeItem('reachinbox_token');
+          if (err.response?.status === 401 || err.response?.status === 403) {
+            setIsAuthenticated(false);
+            localStorage.removeItem('reachinbox_token');
+          }
         })
         .finally(() => {
           setLoading(false);

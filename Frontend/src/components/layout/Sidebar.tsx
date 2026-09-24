@@ -137,7 +137,7 @@ export function Sidebar({ open, onClose, user, onNavigate }: SidebarProps) {
         {user && (
           <div className="border-t border-ink-200 px-4 py-3">
             <div className="flex items-center gap-3">
-              <Avatar name={user.name} size="sm" />
+              <Avatar name={user.name} src={user.avatarUrl} size="sm" />
               <div className="min-w-0 flex-1">
                 <p className="text-[13px] font-medium text-ink-900 truncate">{user.name}</p>
                 <p className="text-[11px] text-ink-500 truncate">{user.role}</p>

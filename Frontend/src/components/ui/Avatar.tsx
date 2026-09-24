@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { getInitials } from '@/lib/format';
 
 interface AvatarProps {
@@ -14,11 +15,15 @@ const sizes = {
 };
 
 export function Avatar({ name, src, size = 'md', className = '' }: AvatarProps) {
-  if (src) {
+  const [hasError, setHasError] = useState(false);
+
+  if (src && !hasError) {
     return (
       <img
         src={src}
         alt={name}
+        referrerPolicy="no-referrer"
+        onError={() => setHasError(true)}
         className={`rounded-full object-cover ${sizes[size]} ${className}`}
       />
     );
