@@ -1,5 +1,5 @@
 import type { User } from '@/types';
-import { apiClient } from './apiClient';
+import { apiClient, API_BASE_URL } from './apiClient';
 
 function delay(ms: number = 600): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -22,6 +22,6 @@ export const authService = {
   },
 
   async getGoogleAuthUrl(): Promise<string> {
-    return `${import.meta.env.VITE_API_URL || '/api'}/auth/google`;
+    return `${API_BASE_URL}/auth/google`;
   },
 };

@@ -1,5 +1,5 @@
 import type { SlackConnection } from '@/types';
-import { apiClient } from './apiClient';
+import { apiClient, API_BASE_URL } from './apiClient';
 
 function delay(ms: number = 600): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -16,7 +16,7 @@ export const slackService = {
   },
 
   async getAuthUrl(): Promise<string> {
-    return `${import.meta.env.VITE_API_URL || '/api'}/slack/auth`;
+    return `${API_BASE_URL}/slack/auth`;
   },
 
   async connect(workspace: string): Promise<SlackConnection> {

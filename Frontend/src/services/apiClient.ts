@@ -1,9 +1,17 @@
 import axios from 'axios';
 
-const baseURL = import.meta.env.VITE_API_URL || '/api';
+// Get base URL from environment or default to deployed Render API
+const rawApiUrl = (import.meta.env.VITE_API_URL || 'https://reachinbox-yvsm.onrender.com/api').trim();
+
+// Normalize API_BASE_URL: ensure proper /api suffix for full URLs
+export const API_BASE_URL = rawApiUrl.startsWith('http')
+  ? (rawApiUrl.replace(/\/+$/, '').endsWith('/api') ? rawApiUrl.replace(/\/+$/, '') : `${rawApiUrl.replace(/\/+$/, '')}/api`)
+  : (rawApiUrl.replace(/\/+$/, '') || '/api');
+
+export const WORKER_URL = (import.meta.env.VITE_WORKER_URL || 'https://reachinbox-worker-qyhk.onrender.com').replace(/\/+$/, '');
 
 export const apiClient = axios.create({
-  baseURL,
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },

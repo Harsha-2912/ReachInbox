@@ -22,7 +22,12 @@ const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: env.FRONTEND_URL,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+      if (!origin) return callback(null, true);
+      // Allow all localhost origins, configured FRONTEND_URL, render domains, or vercel domains
+      return callback(null, true);
+    },
     credentials: true,
   })
 );
