@@ -16,8 +16,7 @@ async function bootstrap() {
     } catch (e) {
       logger.warn(`⚠️ Could not connect to Elasticsearch: Search functionality will fail.`);
     }
-
-    app.listen(env.PORT, () => {
+    app.listen(parseInt(env.PORT, 10), '0.0.0.0', () => {
       logger.info(`🚀 Server running on port ${env.PORT}`);
     });
   } catch (err) {

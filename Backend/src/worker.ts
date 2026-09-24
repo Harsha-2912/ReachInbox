@@ -30,8 +30,7 @@ async function bootstrap() {
         res.end('Not Found');
       }
     });
-
-    server.listen(port, () => {
+    server.listen(Number(port), '0.0.0.0', () => {
       logger.info(`🌐 Worker health check server listening on port ${port}`);
     });
 
