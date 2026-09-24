@@ -39,6 +39,7 @@ export const authController = {
 
     const authorizeUrl = oauth2Client.generateAuthUrl({
       access_type: 'offline',
+      prompt: 'select_account',
       scope: [
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/userinfo.email'
