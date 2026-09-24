@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import type { User } from '@/types';
 import { authService } from '@/services/auth.service';
 
@@ -29,6 +29,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // 2. Fallback to local storage
     return !!localStorage.getItem('reachinbox_token');
   });
+
+  useEffect(() => {
+    if (isAuthenticated && !user) {
+      setLoading(true);
+      authService.getCurrentUser()
+        .then(userData => {
+          setUser(userData);
+        })
+        .catch(err => {
+          console.error("Failed to fetch user:", err);
+          setIsAuthenticated(false);
+          localStorage.removeItem('reachinbox_token');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [isAuthenticated, user]);
 
   const login = useCallback(async () => {
     setLoading(true);

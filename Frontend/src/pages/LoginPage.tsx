@@ -12,8 +12,7 @@ export function LoginPage() {
   const handleGoogleLogin = async () => {
     try {
       await login();
-      toast.success('Welcome to ReachInbox');
-      navigate('/');
+      // Do not navigate here, the login() function sets window.location.href to the backend OAuth URL
     } catch {
       toast.error('Google sign-in failed. Please try again.');
     }

@@ -23,6 +23,7 @@ const envSchema = z.object({
   MIN_EMAIL_DELAY_MS: z.string().default('2000').transform(Number),
   MAX_EMAILS_PER_HOUR: z.string().default('100').transform(Number),
   SESSION_SECRET: z.string().default('super_secret_session_key'),
+  JWT_SECRET: z.string().default('super_secret_jwt_key'),
   FRONTEND_URL: z.string().default('http://localhost:5173'),
 });
 
